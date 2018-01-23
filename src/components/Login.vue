@@ -33,6 +33,8 @@
 import {set}  from '../assets/js/cookieUtil'
 
 export default {
+  name: 'Login',
+
   data () {
     return {
       name: '',

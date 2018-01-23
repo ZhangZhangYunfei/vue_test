@@ -28,17 +28,17 @@
     <el-container>
       <el-aside style="background-color: rgb(238, 241, 246)"  width="auto">
         <el-menu :collapse="isCollapse" class="el-menu-vertical-demo">
-          <el-menu-item index="1" :to="{path: '/home/schedule'}">
+          <el-menu-item index="1" @click="$router.push({path: '/home/schedule'})">
             <i class="el-icon-date"></i>
             <span slot="title">我的课表</span>
           </el-menu-item>
-          <el-menu-item index="2" :to="{path: '/home/students'}">
+          <el-menu-item index="2" @click="$router.push({path: '/home/students'})">
             <i class="el-icon-view"></i>
             <span slot="title">我的学生</span>
           </el-menu-item>
-          <el-menu-item index="3" :to="{path: '/home/subjects_creation'}">
+          <el-menu-item index="3" @click="$router.push({path: '/home/subjects'})">
             <i class="el-icon-edit-outline"></i>
-            <span slot="title">课时录入</span>
+            <span slot="title">新课录入</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
@@ -66,7 +66,10 @@
 </style>
 
 <script>
+
 export default {
+  name: 'Home',
+
   data() {
     return {
       isCollapse: false

@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import Schedule from '@/components/schedule/Schedule'
 import Students from '@/components/students/Students'
-import CreateSubjects from '@/components/subjects/CreateSubjects'
+import Subjects from '@/components/subjects/Subjects'
 
 import Login from '@/components/Login'
 
@@ -18,7 +18,7 @@ export default new Router({
       children: [
         {path: 'schedule', component: Schedule},
         {path: 'students', component: Students},
-        {path: 'subjects_creation', component: CreateSubjects}
+        {path: 'subjects', component: Subjects}
       ]
     },
     {
