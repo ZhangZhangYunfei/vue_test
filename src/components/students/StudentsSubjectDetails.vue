@@ -4,100 +4,97 @@
       :data="subjects"
       border
       style="width: 100%">
-      <el-table-column prop="name" label="姓名" align="center">
+      <el-table-column prop="student_name" label="姓名" align="center">
       </el-table-column>
 
       <el-table-column prop="type" label="课程类型" align="center">
       </el-table-column>
 
-      <el-table-column prop="totalHours" label="总课时" align="center">
+      <el-table-column prop="total_hours" label="总课时" align="center">
       </el-table-column>
 
-      <el-table-column prop="availableHours" label="剩余课时" align="center">
+      <el-table-column prop="available_hours" label="剩余课时" align="center">
       </el-table-column>
 
-      <el-table-column prop="reservedHours" label="待确认课时" align="center">
+      <el-table-column prop="reserved_hours" label="待确认课时" align="center">
       </el-table-column>
 
       <el-table-column fixed="right" label="操作" align="center">
         <template slot-scope="scope">
-          <el-button @click="confirmSubject(scope.row)" type="text" size="small">课时确认</el-button>
-          <el-button @click="reviseSubject(scope.row)" type="text" size="small">课时修改</el-button>
+          <el-button @click="registrationDetails(scope.row)" type="text" size="small">报名详情</el-button>
+          <el-button @click="assignmentDetails(scope.row)" type="text" size="small">上课详情</el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <el-dialog
       title=""
-      :visible.sync="confirmDialogVisible"
+      :visible.sync="registrationDetailsVisible"
       width="60%">
       <el-table
-        :data="assignments"
+        :data="registrations"
         border
         style="width: 100%">
         <el-table-column prop="name" label="姓名" align="center">
         </el-table-column>
-        <el-table-column prop="type" label="课程类型" align="center">
+        <el-table-column prop="hours" label="小时" align="center">
         </el-table-column>
-        <el-table-column prop="date" label="上课日期" align="center">
+        <el-table-column prop="created_time" label="创建日期" align="center">
         </el-table-column>
-        <el-table-column fixed="right" label="操作" align="center">
-          <template slot-scope="scope">
-            <el-button @click="onConfirm(scope.row)" type="text" size="small">确认</el-button>
-            <el-button @click="onDelete(scope.row)" type="text" size="small">删除</el-button>
-          </template>
+        <el-table-column prop="amount" label="金额" align="center">
         </el-table-column>
       </el-table>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="confirmDialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="registrationDetailsVisible = false">确 定</el-button>
       </span>
     </el-dialog>
 
     <el-dialog
       title=""
-      :visible.sync="reviseDialogVisible"
+      :visible.sync="assignmentDetailsVisible"
       width="60%">
-      <el-form ref="form" :model="subject" label-width="80px">
-        <el-form-item label="学生姓名">
-          <el-col :span="8">
-            <el-input v-model="subject.name" placeholder="请输入学生姓名" disabled="true"></el-input>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="课程类型" required="true">
-          <el-col :span="8">
-            <el-input v-model="subject.type" placeholder="请输入课程类型" disabled="true"></el-input>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="课程描述">
-          <el-col :span="8">
-            <el-input v-model="subject.desc" placeholder="请输入课程描述" disabled="true"></el-input>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="总共时长">
-          <el-col :span="16" align="left">
-            <el-input-number v-model="subject.totalHours" :disabled="true"></el-input-number>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="待确认时长">
-          <el-col :span="16" align="left">
-            <el-input-number v-model="subject.reservedHours" disabled="true"></el-input-number>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="剩余时长">
-          <el-col :span="16" align="left">
-            <el-input-number v-model="subject.availableHours"
-                             :onchange="subject.totalHours=subject.reservedHours+subject.availableHours"></el-input-number>
-            <el-button type="primary" @click="onRevise">确定</el-button>
-          </el-col>
-        </el-form-item>
-      </el-form>
+      <el-table
+        :data="assignments"
+        border
+        style="width: 100%">
+        <el-table-column prop="studentName" label="姓名" align="center">
+        </el-table-column>
+        <el-table-column prop="type" label="课程类型" align="center">
+        </el-table-column>
+        <el-table-column prop="hours" label="时长" align="center">
+        </el-table-column>
+        <el-table-column prop="scheduled_time" label="上课日期" align="center">
+        </el-table-column>
+        <el-table-column label="状态" align="center">
+          <template slot-scope="scope">
+            <el-tag size="medium" :type="scope.row.status === 1 ? 'success':'warning'">
+              {{ scope.row.status === 1 ? '已结束':'未确认' }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column fixed="right" label="操作" align="center">
+          <template slot-scope="scope">
+            <el-button @click="onConfirm(scope.row)" type="text" size="small" :disabled="scope.row.status===1">
+              确认
+            </el-button>
+            <el-button @click="onDelete(scope.row)" type="text" size="small" :disabled="scope.row.status===1">
+              删除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="assignmentDetailsVisible = false">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 
 </template>
 
 <script>
-    export default {
+  import Vue from 'vue'
+
+  export default {
       name: "students-subject-details",
 
       props: ['selected_student'],
@@ -106,86 +103,86 @@
         selected_student: function(newVal) {
           let vm = this;
           vm.$emit('switchLoading', true);
-          console.info(this.selected_student);
-          this.subjects = [{
-            name: "李晓",
-            type: '一对三',
-            totalHours: 10,
-            availableHours: 9,
-            reservedHours: 1
-          }]
+          this.query();
           vm.$emit('switchLoading', false);
         }
       },
 
       computed: {
-        studentName: function () {
-          return this.selected_student.name;
-        }
       },
 
       data() {
         return {
-          confirmDialogVisible: false,
-          reviseDialogVisible: false,
+          registrationDetailsVisible: false,
+          assignmentDetailsVisible: false,
 
-          subjects: [{
-            name: '王晓',
-            type: '一对三',
-            totalHours: 10,
-            availableHours: 9,
-            reservedHours: 1
-          }, {
-            name: '王晓',
-            type: '一对一',
-            totalHours: 5,
-            availableHours: 4,
-            reservedHours: 1
-          }],
-
-          assignments: [{
-            name: '王晓',
-            type: '一对三',
-            date: '2017-12-05',
-            teacher: '',
-            subject: '',
-            state: ''
-          }, {
-            name: '王晓',
-            type: '一对三',
-            date: '2017-11-05',
-            teacher: '',
-            subject: '',
-            state: ''
-          }],
-
-          subject:{
-            name: '王晓',
-            type: '一对三',
-            totalHours: 10,
-            availableHours: 9,
-            reservedHours: 1,
-            desc:'假的课程'
-          }
+          subjects: [],
+          registrations: [],
+          assignments: []
         }
       },
 
       created: function () {
-        console.info(this.selected_student)
+        this.query();
       },
 
       methods: {
-        confirmSubject(row) {
-          this.confirmDialogVisible = true;
+        registrationDetails(row) {
+          Vue.http.get('/api/registration?studentId='+row.student_id+'&subjectId='+row.id)
+            .then(resp => {
+              if (resp.body.status && resp.body.status === 'FAILED') {
+                this.$message.error(resp.body.message)
+              } else {
+                this.registrations = resp.body;
+                this.registrationDetailsVisible = true;
+              }
+            })
+            .catch(msg => this.$message.error(msg.data))
         },
-        reviseSubject(row){
-          this.reviseDialogVisible = true;
+        assignmentDetails(row){
+          Vue.http.get('/api/assignment/student?studentId='+row.student_id+'&subjectId='+row.id)
+            .then(resp => {
+              if (resp.body.status && resp.body.status === 'FAILED') {
+                this.$message.error(resp.body.message)
+              } else {
+                this.assignments = resp.body;
+                this.assignmentDetailsVisible = true;
+              }
+            })
+            .catch(msg => this.$message.error(msg.data))
         },
         onConfirm(row) {
+          Vue.http.post('/api/assignment/'+row.id)
+            .then(resp => {
+              if (resp.body.status && resp.body.status === 'FAILED') {
+                this.$message.error(resp.body.message)
+              } else {
+                this.assignmentDetails({student_id:row.student_id, id:row.subject_id});
+              }
+            })
+            .catch(msg => this.$message.error(msg.data))
         },
         onDelete(row) {
+          Vue.http.delete('/api/assignment/'+row.id)
+            .then(resp => {
+              if (resp.body.status && resp.body.status === 'FAILED') {
+                this.$message.error(resp.body.message)
+              } else {
+                this.assignmentDetails({student_id:row.student_id, id:row.subject_id});
+              }
+            })
+            .catch(msg => this.$message.error(msg.data))
         },
-        onRevise(){
+        query() {
+          Vue.http.get('/api/subject?studentId='+this.selected_student.id)
+            .then(resp => {
+              if (resp.body.status && resp.body.status === 'FAILED') {
+                this.$message.error(resp.body.message)
+              } else {
+                this.subjects = resp.body
+              }
+            })
+            .catch(msg => this.$message.error(msg.data))
         }
       }
 

@@ -1,5 +1,5 @@
 
-function get(name){
+function getCookie(name){
     let cookieName = encodeURIComponent(name) + '=',
         cookieStart = document.cookie.indexOf(cookieName),
         cookieValue = null,
@@ -13,7 +13,7 @@ function get(name){
         + cookieName.length, cookieEnd))
     return cookieValue
 }
-function set(name, value, expires, path, domain, secure){
+function setCookie(name, value, expires, path, domain, secure){
     let cookieText = encodeURIComponent(name) + "=" + encodeURIComponent(value)
     if (expires instanceof Date)
         cookieText += "; expires=" + expires.toGMTString()
@@ -23,10 +23,10 @@ function set(name, value, expires, path, domain, secure){
     document.cookie = cookieText
 }
 
-function unset(name, path, domain, secure) {
-    set(name, '', new Date(0), path, domain, secure);
+function delCookie(name, path, domain, secure) {
+  setCookie(name, '', new Date(0), path, domain, secure);
 }
 
 export {
-    get,set,unset
+  getCookie,setCookie,delCookie
 }

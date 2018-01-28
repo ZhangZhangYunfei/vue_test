@@ -7,7 +7,7 @@
       </el-tab-pane>
       <el-tab-pane name="2">
         <span slot="label"><i class="el-icon-plus"></i> 新学生</span>
-        <CreateStudent></CreateStudent>
+        <CreateStudent :activeTab='activeName'></CreateStudent>
       </el-tab-pane>
       <el-tab-pane name="3">
         <span slot="label"><i class="el-icon-edit-outline"></i> 学生信息更新</span>

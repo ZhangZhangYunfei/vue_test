@@ -34,43 +34,37 @@
 </template>
 
 <script>
+  import Vue from 'vue'
+
   export default {
     name: 'StudentsList',
+
+    created() {
+      this.query();
+    },
 
     methods: {
       handleClick(row) {
         let vm = this;
         vm.$emit('secected_studemt', row)
+      },
+
+      query() {
+        Vue.http.get('/api/subject/students')
+          .then(resp => {
+            if (resp.body.status && resp.body.status === 'FAILED') {
+              this.$message.error(resp.body.message)
+            } else {
+              this.students = resp.body
+            }
+          })
+          .catch(msg => this.$message.error(msg.data))
       }
     },
 
     data() {
       return {
-        students: [{
-          name: '王小虎',
-          school: '香山中学',
-          degree: '高一',
-          address: '上海市普陀区金沙江路 1518 弄',
-          telephone: 13917043650
-        }, {
-          name: '王小',
-          school: '香山中学',
-          degree: '高一',
-          address: '上海市普陀区金沙江路 1518 弄',
-          telephone: 13917043650
-        }, {
-          name: '小虎',
-          school: '香山中学',
-          degree: '高一',
-          address: '上海市普陀区金沙江路 1518 弄',
-          telephone: 13917043650
-        }, {
-          name: '虎',
-          school: '香山中学',
-          degree: '高一',
-          address: '上海市普陀区金沙江路 1518 弄',
-          telephone: 13917043650
-        }]
+        students: []
       }
     }
   }
