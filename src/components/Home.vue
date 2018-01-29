@@ -128,17 +128,17 @@
         pwdResetDialogVisible: false,
         isCollapse: false,
 
-        pwdInfo:{
-          oldPwd:'',
-          newPwd:'',
-          newPwdAgain:''
+        pwdInfo: {
+          oldPwd: '',
+          newPwd: '',
+          newPwdAgain: ''
         }
       }
     },
 
     created() {
-      const user = getCookie('user');
-      if (!user) this.$router.push('/login');
+      const user = getCookie('user')
+      if (!user) this.$router.push('/login')
       if (user && !this.user.name) {
         Vue.http.get('/api/user')
           .then(response => {
@@ -163,22 +163,22 @@
     methods: {
       handleCommand(command) {
         if (command === 'info') {
-          this.infoDialogVisible = true;
+          this.infoDialogVisible = true
         } else if (command === 'logout') {
           Vue.http.post('/api/user/logout')
             .then(response => {
               if (response.body.status && response.body.status === 'FAILED') {
                 this.$message.error(response.body.message)
               } else {
-                delCookie('user', '/', window.location.hostname);
-                this.setUser({});
-                this.$message.success(response.body.message);
+                delCookie('user', '/', window.location.hostname)
+                this.setUser({})
+                this.$message.success(response.body.message || '执行成功')
                 this.$router.push('/login')
               }
             })
             .catch(msg => this.$message.error(msg.data))
         } else if (command === 'pwd_reset') {
-          this.pwdResetDialogVisible = true;
+          this.pwdResetDialogVisible = true
         }
       },
 
@@ -186,15 +186,18 @@
         if (this.pwdInfo.newPwd !== this.pwdInfo.newPwdAgain) {
           this.$message.error('新密码两次输入不一致！')
         } else {
-          Vue.http.post('/api/user/password-resets', {oldPassword:this.pwdInfo.oldPwd, newPassword:this.pwdInfo.newPwd})
+          Vue.http.post('/api/user/password-resets', {
+            oldPassword: this.pwdInfo.oldPwd,
+            newPassword: this.pwdInfo.newPwd
+          })
             .then(response => {
               if (response.body.status && response.body.status === 'FAILED') {
                 this.$message.error(response.body.message)
               } else {
-                delCookie('user', '/', window.location.hostname);
-                this.setUser({});
-                this.$message.success(response.body.message);
-                this.pwdResetDialogVisible = false;
+                delCookie('user', '/', window.location.hostname)
+                this.setUser({})
+                this.$message.success(response.body.message)
+                this.pwdResetDialogVisible = false
                 this.$router.push('/login')
               }
             })

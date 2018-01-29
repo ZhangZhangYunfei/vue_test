@@ -82,7 +82,6 @@
       },
 
       onSubmit() {
-        debugger
         Vue.http.post('/api/registration', {
           studentId: this.form.studentId,
           type: this.form.type,
