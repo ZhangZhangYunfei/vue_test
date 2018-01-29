@@ -9,20 +9,15 @@
           placeholder="选择周">
         </el-date-picker>
       </el-col>
-      <!--<el-col :span="2" align="left">-->
-        <!--<i class="el-icon-time"></i>-->
-        <!--<span style="margin-left: 10px">{{start}}</span>-->
-      <!--</el-col>-->
-      <!--<el-col :span="2" align="left">-->
-        <!--<i class="el-icon-time"></i>-->
-        <!--<span style="margin-left: 10px">{{end}}</span>-->
-      <!--</el-col>-->
-      <el-button type="primary" @click="onSubmit">查询</el-button>
+      <span style="margin-left: 10px"></span>
+      <el-button type="primary" @click="onQuery" :disabled="!date || date===''">查询</el-button>
     </el-row>
     <el-table
+      @cell-dblclick="cellDoubleClick"
       :data="tableData"
       border
       stripe
+      :cellClassName="cellClassName"
       style="width: 100%">
       <el-table-column
         fixed="left"
@@ -41,22 +36,11 @@
             :key="tag.id"
             :type="tag.state === 0 ? 'danger' : 'success'"
             v-for="tag in scope.row.monday"
-            closable
+            :closable="tag.state === 0"
             :disable-transitions="false"
             @close="handleClose(tag)">
             {{tag.studentName}}
           </el-tag>
-          <el-input
-            class="input-new-tag"
-            v-if="inputVisible"
-            v-model="inputValue"
-            ref="saveTagInput"
-            size="small"
-            @keyup.enter.native="handleInputConfirm"
-            @blur="handleInputConfirm">
-          </el-input>
-          <el-button v-else class="button-new-tag" size="small" type="text" @click="showInput">+
-          </el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -68,22 +52,11 @@
             :key="tag.id"
             :type="tag.state === 0 ? 'danger' : 'success'"
             v-for="tag in scope.row.tuesday"
-            closable
+            :closable="tag.state === 0"
             :disable-transitions="false"
             @close="handleClose(tag)">
             {{tag.studentName}}
           </el-tag>
-          <el-input
-            class="input-new-tag"
-            v-if="inputVisible"
-            v-model="inputValue"
-            ref="saveTagInput"
-            size="small"
-            @keyup.enter.native="handleInputConfirm"
-            @blur="handleInputConfirm">
-          </el-input>
-          <el-button v-else class="button-new-tag" size="small" type="text" @click="showInput">+
-          </el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -95,22 +68,11 @@
             :key="tag.id"
             :type="tag.state === 0 ? 'danger' : 'success'"
             v-for="tag in scope.row.wednesday"
-            closable
+            :closable="tag.state === 0"
             :disable-transitions="false"
             @close="handleClose(tag)">
             {{tag.studentName}}
           </el-tag>
-          <el-input
-            class="input-new-tag"
-            v-if="inputVisible"
-            v-model="inputValue"
-            ref="saveTagInput"
-            size="small"
-            @keyup.enter.native="handleInputConfirm"
-            @blur="handleInputConfirm">
-          </el-input>
-          <el-button v-else class="button-new-tag" size="small" type="text" @click="showInput">+
-          </el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -122,22 +84,11 @@
             :key="tag.id"
             :type="tag.state === 0 ? 'danger' : 'success'"
             v-for="tag in scope.row.thursday"
-            closable
+            :closable="tag.state === 0"
             :disable-transitions="false"
             @close="handleClose(tag)">
             {{tag.studentName}}
           </el-tag>
-          <el-input
-            class="input-new-tag"
-            v-if="inputVisible"
-            v-model="inputValue"
-            ref="saveTagInput"
-            size="small"
-            @keyup.enter.native="handleInputConfirm"
-            @blur="handleInputConfirm">
-          </el-input>
-          <el-button v-else class="button-new-tag" size="small" type="text" @click="showInput">+
-          </el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -149,22 +100,11 @@
             :key="tag.id"
             :type="tag.state === 0 ? 'danger' : 'success'"
             v-for="tag in scope.row.friday"
-            closable
+            :closable="tag.state === 0"
             :disable-transitions="false"
             @close="handleClose(tag)">
             {{tag.studentName}}
           </el-tag>
-          <el-input
-            class="input-new-tag"
-            v-if="inputVisible"
-            v-model="inputValue"
-            ref="saveTagInput"
-            size="small"
-            @keyup.enter.native="handleInputConfirm"
-            @blur="handleInputConfirm">
-          </el-input>
-          <el-button v-else class="button-new-tag" size="small" type="text" @click="showInput">+
-          </el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -176,21 +116,11 @@
             :key="tag.id"
             :type="tag.state === 0 ? 'danger' : 'success'"
             v-for="tag in scope.row.saturday"
-            closable
+            :closable="tag.state === 0"
             :disable-transitions="false"
             @close="handleClose(tag)">
             {{tag.studentName}}
           </el-tag>
-          <el-input
-            class="input-new-tag"
-            v-if="inputVisible"
-            v-model="inputValue"
-            ref="saveTagInput"
-            size="small"
-            @keyup.enter.native="handleInputConfirm"
-            @blur="handleInputConfirm">
-          </el-input>
-          <el-button v-else class="button-new-tag" size="small" type="text" @click="showInput">+</el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -202,24 +132,50 @@
             :key="tag.id"
             :type="tag.state === 0 ? 'danger' : 'success'"
             v-for="tag in scope.row.sunday"
-            closable
+            :closable="tag.state === 0"
             :disable-transitions="false"
             @close="handleClose(tag)">
             {{tag.studentName}}
           </el-tag>
-          <el-input
-            class="input-new-tag"
-            v-if="inputVisible"
-            v-model="inputValue"
-            ref="saveTagInput"
-            size="small"
-            @keyup.enter.native="handleInputConfirm"
-            @blur="handleInputConfirm">
-          </el-input>
-          <el-button v-else class="button-new-tag" size="small" type="text" @click="showInput">+</el-button>
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog
+      title=""
+      :visible.sync="createAssignVisible"
+      width="60%">
+      <el-row type="flex" justify="center">
+        <el-form ref="form" :model="assignments" label-width="80px">
+          <el-form-item label="上课日期">
+            <el-input v-model="assignments.scheduledDate" disabled="true"></el-input>
+          </el-form-item>
+          <el-form-item label="星期">
+            <el-input v-model="assignments.weekIndex" disabled="true"></el-input>
+          </el-form-item>
+          <el-form-item label="时间段">
+            <el-input v-model="assignments.scheduledTime" disabled="true"></el-input>
+          </el-form-item>
+          <el-form-item label="添加学生">
+            <el-select v-model="assignments.assigns" placeholder="请选择">
+              <el-option
+                v-for="item in subjects"
+                :key="item.id"
+                :label="item.student_name"
+                :value="item">
+                <span style="float: left">{{ item.student_name }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">
+                  {{ item.type }}:剩余{{ item.available_hours }}
+                </span>
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </el-row>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="createAssignments">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -230,24 +186,31 @@
     name: 'Schedule',
 
     created() {
-      // this.query();
+      Vue.http.get('/api/subject')
+        .then(resp => {
+          if (resp.body.status && resp.body.status === 'FAILED') {
+            this.$message.error(resp.body.message)
+          } else {
+            this.subjects = resp.body
+          }
+        })
+        .catch(msg => this.$message.error(msg.data))
     },
 
-    computed: {
-      // start() {
-      //   return this.date && this.date.length >= 10 ? '201800029938388383838383'.substr(0, 10) :  '';
-      // },
-      // end() {
-      //   return this.date && this.date.length >= 10 ? '201800029938388383838383'.substr(0, 10) :  '';
-      // }
-    },
+    computed: {},
 
     methods: {
-      onSubmit() {
-        this.query('2018-01-15', '2018-01-15');
+      onQuery() {
+        let start = new Date(this.date);
+        start.setDate(start.getDate() + 1);
+
+        let end = new Date(this.date);
+        end.setDate(end.getDate() + 7);
+
+        this.queryAssignments(start.toISOString().substr(0, 10), end.toISOString().substr(0, 10));
       },
 
-      query(start, end) {
+      queryAssignments(start, end) {
         Vue.http.get('/api/assignment?start=' + start + '&end=' + end)
           .then(resp => {
             if (resp.body.status && resp.body.status === 'FAILED') {
@@ -259,30 +222,60 @@
           .catch(msg => this.$message.error(msg.data))
       },
 
-      handleClick(row) {
-        console.log(row);
+      cellClassName({row, column, rowIndex, columnIndex}) {
+        return 'YXCUSTOMIZATION:' + rowIndex + ':' + columnIndex;
+      },
+
+      cellDoubleClick(row, column, cell, event) {
+        let index = cell.className.indexOf('YXCUSTOMIZATION:') + 'YXCUSTOMIZATION:'.length;
+        let array = cell.className.substr(index, 3).split(':');
+
+        let x = Number(array[1]);
+        let y = Number(array[0]) + 1;
+        let scheduledDate = new Date(this.date);
+        scheduledDate.setDate(scheduledDate.getDate() + x);
+
+        this.assignments = {
+          scheduledDate: scheduledDate.toISOString().substr(0, 10),
+          weekIndex: x,
+          scheduledTime: this.indexMethod(y - 1),
+          x: x,
+          y: y,
+          assigns: []
+        };
+        if (y > 5) {
+          this.$message.success('亲爱的，此时间该休息了，不要点啦！')
+        } else {
+          this.createAssignVisible = true;
+        }
+      },
+
+      createAssignments() {
+        debugger
+        assignments.assigns.forEach((v, _) => {
+          Vue.http.post('/api/assignment', {
+            subjectId: v.id,
+            studentId: v.student_id,
+            scheduledTime: assignments.scheduledDate,
+            positionX: assignments.x,
+            positionY: assignments.y
+          })
+            .then(resp => {
+              if (resp.body.status && resp.body.status === 'FAILED') {
+                this.$message.error(resp.body.message)
+              } else {
+                //this.tableData = resp.body
+                this.assignments = {};
+                this.createAssignVisible = false;
+              }
+            })
+            .catch(msg => this.$message.error(msg.data))
+        });
       },
 
       handleClose(tag) {
         this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
       },
-
-      showInput() {
-        this.inputVisible = true;
-        this.$nextTick(_ => {
-          this.$refs.saveTagInput.$refs.input.focus();
-        });
-      },
-
-      handleInputConfirm() {
-        let inputValue = this.inputValue;
-        if (inputValue) {
-          this.dynamicTags.push(inputValue);
-        }
-        this.inputVisible = false;
-        this.inputValue = '';
-      },
-
 
       indexMethod(index) {
         switch (index) {
@@ -299,7 +292,7 @@
           case 5:
             return '19:00-21:00';
           default:
-            return '要钱不要命？'
+            return '21:00-23:00'
         }
       }
     },
@@ -307,10 +300,20 @@
     data() {
       return {
         date: '',
-        inputVisible: false,
-        inputValue: '',
+        createAssignVisible: false,
+        assignments: {},
+        subjects: [],
         tableData: []
       }
     }
   }
 </script>
+
+<style scoped>
+  .el-tag + .el-tag {
+    margin-left: 10px;
+  }
+  .el-row {
+    width: 100%;
+  }
+</style>

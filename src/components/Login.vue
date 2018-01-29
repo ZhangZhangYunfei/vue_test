@@ -35,6 +35,8 @@
                 :value="item.value">
               </el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item>
             <el-button type="primary" @click="doLogin()">登陆</el-button>
           </el-form-item>
         </el-form>
@@ -114,5 +116,11 @@
 <style scoped>
   .el-row {
     margin-bottom: 120px;
+  }
+  .el-button {
+    width: 100%;
+  }
+  .el-select {
+    width: 100%;
   }
 </style>

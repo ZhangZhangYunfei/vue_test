@@ -1,7 +1,7 @@
 <template>
   <el-form ref="form" :model="form" label-width="110px">
     <el-form-item label="学生姓名" required="true">
-      <el-col :span="24" align="left">
+      <el-col :span="8" align="left">
         <el-select v-model="form.studentId" placeholder="请选择">
           <el-option
             v-for="item in students"
@@ -20,12 +20,12 @@
       </el-col>
     </el-form-item>
     <el-form-item label="报名时长">
-      <el-col :span="16" align="left">
+      <el-col :span="8" align="left">
         <el-input-number v-model="form.hours" :min="1"></el-input-number>
       </el-col>
     </el-form-item>
     <el-form-item label="学费">
-      <el-col :span="16" align="left">
+      <el-col :span="8" align="left">
         <el-input-number v-model="form.amount" :min="1"></el-input-number>
       </el-col>
     </el-form-item>
@@ -104,7 +104,10 @@
 </script>
 
 <style scoped>
-  .e {
-    margin-bottom: 30px;
+  .el-select {
+    width: 100%;
+  }
+  .el-input-number {
+    width: 100%;
   }
 </style>

@@ -58,12 +58,12 @@
             </el-col>
           </el-form-item>
           <el-form-item label="报名时长">
-            <el-col :span="16" align="left">
+            <el-col :span="8" align="left">
               <el-input-number v-model="form.hours" :min="1"></el-input-number>
             </el-col>
           </el-form-item>
           <el-form-item label="学费">
-            <el-col :span="16" align="left">
+            <el-col :span="8" align="left">
               <el-input-number v-model="form.amount" :min="1"></el-input-number>
             </el-col>
           </el-form-item>
@@ -161,5 +161,7 @@
 </script>
 
 <style scoped>
-
+  .el-input-number {
+    width: 100%;
+  }
 </style>

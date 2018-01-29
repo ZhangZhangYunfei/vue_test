@@ -174,7 +174,7 @@
             .catch(msg => this.$message.error(msg.data))
         },
         query() {
-          Vue.http.get('/api/subject?studentId='+this.selected_student.id)
+          Vue.http.get('/api/subject/student?studentId='+this.selected_student.id)
             .then(resp => {
               if (resp.body.status && resp.body.status === 'FAILED') {
                 this.$message.error(resp.body.message)
