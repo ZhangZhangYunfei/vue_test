@@ -143,7 +143,7 @@
         Vue.http.post('/api/registration', {
           studentId: this.form.studentId,
           type: this.form.type,
-          hours: this.form.type,
+          hours: this.form.hours,
           amount: this.form.amount
         })
           .then(resp => {
