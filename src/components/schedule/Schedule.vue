@@ -1,15 +1,13 @@
 <template>
   <div>
-    <el-row type="flex" class="row-bg" justify="start">
-      <el-col :span="5" align="left">
-        <el-date-picker
-          v-model="date"
-          type="week"
-          format="yyyy-MM-dd"
-          placeholder="选择周">
-        </el-date-picker>
-      </el-col>
-      <span style="margin-left: 10px"></span>
+    <el-row type="flex" class="row-bg">
+      <el-date-picker
+        v-model="date"
+        type="week"
+        format="yyyy-MM-dd"
+        placeholder="选择周">
+      </el-date-picker>
+      <span style="margin-left: 5px"></span>
       <el-button type="primary" @click="onQuery" :disabled="!date || date===''">查询</el-button>
     </el-row>
     <el-table
@@ -25,7 +23,7 @@
         type="index"
         :index="indexMethod"
         align="center"
-        width="150">
+        width="100">
       </el-table-column>
       <el-table-column
         prop="monday"
@@ -142,11 +140,11 @@
     </el-table>
 
     <el-dialog
-      title=""
+      title="安排课时"
       :visible.sync="createAssignVisible"
-      width="60%">
+      width="80%">
       <el-row type="flex" justify="center">
-        <el-col :span="16">
+        <el-col :xs="24" :sm="22" :md="20" :lg="18" :xl="14">
           <el-form ref="form" :model="assignments" label-width="80px">
             <el-form-item label="上课日期">
               <el-input v-model="assignments.scheduledDate" disabled="true"></el-input>
@@ -183,7 +181,7 @@
     <el-dialog
       title=""
       :visible.sync="operateAssignVisible"
-      width="20%">
+      width="50%">
       <el-button type="success" round @click="onConfirm()">
         已上课
       </el-button>
@@ -397,7 +395,16 @@
     width: 100%;
   }
 
+  .el-date-picker {
+    width: 100%;
+  }
+
   .el-select {
     width: 100%;
+  }
+
+  .el-table-column {
+    width: auto;
+    min-width: 100px;
   }
 </style>

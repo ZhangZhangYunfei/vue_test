@@ -3,15 +3,15 @@
     <el-container>
       <el-header style="text-align: center;">
         <el-row :span="24">
-          <el-col :span="2">
+          <el-col :xs="4" :sm="8" align="left">
             <el-switch
               v-model="isCollapse">
             </el-switch>
           </el-col>
-          <el-col :span="20">
+          <el-col :xs="14" :sm="8">
             <span>优学教育课程管理系统</span>
           </el-col>
-          <el-col :span="1">
+          <el-col :xs="6" :sm="8" align="right">
             <el-dropdown @command="handleCommand">
               <i class="el-icon-setting" style="margin-right: 5px"></i>
               <el-dropdown-menu slot="dropdown">
@@ -20,8 +20,6 @@
                 <el-dropdown-item command="logout">退出</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-          </el-col>
-          <el-col :span="1">
             <span>{{userName}}</span>
           </el-col>
         </el-row>
@@ -100,7 +98,7 @@
 
 <style scoped>
   .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 200px;
+    width: 150px;
     min-height: 200px;
   }
   .el-header {

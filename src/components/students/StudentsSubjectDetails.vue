@@ -28,9 +28,9 @@
     </el-table>
 
     <el-dialog
-      title=""
+      title="报名详情"
       :visible.sync="registrationDetailsVisible"
-      width="60%">
+      width="90%">
       <el-table
         :data="registrations"
         border
@@ -50,9 +50,9 @@
     </el-dialog>
 
     <el-dialog
-      title=""
+      title="上课详情"
       :visible.sync="assignmentDetailsVisible"
-      width="60%">
+      width="90%">
       <el-table
         :data="assignments"
         border
@@ -190,5 +190,8 @@
 </script>
 
 <style scoped>
-
+  .el-table-column {
+    width: auto;
+    min-width: 100px;
+  }
 </style>
