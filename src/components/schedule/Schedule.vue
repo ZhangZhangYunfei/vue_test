@@ -29,7 +29,7 @@
       </el-table-column>
       <el-table-column
         prop="monday"
-        label="星期一"
+        :label="getTitle(1)"
         align="center">
         <template slot-scope="scope">
           <el-tag
@@ -45,7 +45,7 @@
       </el-table-column>
       <el-table-column
         prop="tuesday"
-        label="星期二"
+        :label="getTitle(2)"
         align="center">
         <template slot-scope="scope">
           <el-tag
@@ -61,7 +61,7 @@
       </el-table-column>
       <el-table-column
         prop="wednesday"
-        label="星期三"
+        :label="getTitle(3)"
         align="center">
         <template slot-scope="scope">
           <el-tag
@@ -77,7 +77,7 @@
       </el-table-column>
       <el-table-column
         prop="thursday"
-        label="星期四"
+        :label="getTitle(4)"
         align="center">
         <template slot-scope="scope">
           <el-tag
@@ -93,7 +93,7 @@
       </el-table-column>
       <el-table-column
         prop="friday"
-        label="星期五"
+        :label="getTitle(5)"
         align="center">
         <template slot-scope="scope">
           <el-tag
@@ -109,7 +109,7 @@
       </el-table-column>
       <el-table-column
         prop="saturday"
-        label="星期六"
+        :label="getTitle(6)"
         align="center">
         <template slot-scope="scope">
           <el-tag
@@ -125,7 +125,7 @@
       </el-table-column>
       <el-table-column
         prop="sunday"
-        label="星期天"
+        :label="getTitle(7)"
         align="center">
         <template slot-scope="scope">
           <el-tag
@@ -179,6 +179,22 @@
         <el-button type="primary" @click="createAssignments">确 定</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog
+      title=""
+      :visible.sync="operateAssignVisible"
+      width="20%">
+      <el-button type="success" round @click="onConfirm()">
+        已上课
+      </el-button>
+      <el-button type="danger" round @click="onDelete()">
+        删除
+      </el-button>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="operateAssignVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -203,6 +219,33 @@
     computed: {},
 
     methods: {
+      getTitle(index) {
+        let weekDate = '';
+        if (this.date !== '' && this.date !== null) {
+          let start = new Date(this.date);
+          start.setDate(start.getDate() + index);
+          weekDate = start.toISOString().substr(5, 5);
+        }
+
+        switch (index) {
+          case 1:
+            return '星期一' + (weekDate !== '' ? '(' + weekDate + ')' : '');
+          case 2:
+            return '星期二' + (weekDate !== '' ? '(' + weekDate + ')' : '');
+          case 3:
+            return '星期三' + (weekDate !== '' ? '(' + weekDate + ')' : '');
+          case 4:
+            return '星期四' + (weekDate !== '' ? '(' + weekDate + ')' : '');
+          case 5:
+            return '星期五' + (weekDate !== '' ? '(' + weekDate + ')' : '');
+          case 6:
+            return '星期六' + (weekDate !== '' ? '(' + weekDate + ')' : '');
+          case 7:
+          default:
+            return '星期日' + (weekDate !== '' ? '(' + weekDate + ')' : '');
+        }
+      },
+
       onQuery() {
         let start = new Date(this.date)
         start.setDate(start.getDate() + 1)
@@ -280,12 +323,31 @@
       },
 
       handleClose(tag) {
-        Vue.http.delete('/api/assignment/' + tag.id)
+        this.assignId = tag.id;
+        this.operateAssignVisible = true;
+      },
+
+      onConfirm() {
+        Vue.http.post('/api/assignment/' + this.assignId)
           .then(resp => {
             if (resp.body.status && resp.body.status === 'FAILED') {
               this.$message.error(resp.body.message)
             } else {
-              this.$message.success(resp.body.message || '操作成功！')
+              this.operateAssignVisible = false;
+              this.onQuery()
+            }
+          })
+          .catch(msg => this.$message.error(msg.data))
+      },
+
+      onDelete() {
+        Vue.http.delete('/api/assignment/' + this.assignId)
+          .then(resp => {
+            if (resp.body.status && resp.body.status === 'FAILED') {
+              this.$message.error(resp.body.message)
+            } else {
+              this.$message.success(resp.body.message || '操作成功！');
+              this.operateAssignVisible = false;
               this.onQuery()
             }
           })
@@ -316,6 +378,8 @@
       return {
         date: '',
         createAssignVisible: false,
+        operateAssignVisible: false,
+        assignId: null,
         assignments: {},
         subjects: [],
         tableData: []
@@ -328,9 +392,11 @@
   .el-tag + .el-tag {
     margin-left: 10px;
   }
+
   .el-row {
     width: 100%;
   }
+
   .el-select {
     width: 100%;
   }
