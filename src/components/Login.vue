@@ -3,7 +3,7 @@
     <el-row>
     </el-row>
     <el-row type="flex" justify="center">
-      <el-col :span="6">
+      <el-col :xs="14" :sm="10" :md="8" :lg="6" :xl="4">
         <el-form label-width="0px" align="left">
           <el-form-item>
             <el-input
