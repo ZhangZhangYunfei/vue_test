@@ -135,6 +135,7 @@
     },
 
     created() {
+      this.isCollapse = screen.availWidth < 600
       const user = getCookie('user')
       if (!user) this.$router.push('/login')
       if (user && !this.user.name) {
